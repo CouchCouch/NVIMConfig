@@ -32,12 +32,13 @@ return {
                 "clangd",
                 "eslint",
                 "cmake",
-                "cssls",
+                --"cssls",
                 "harper_ls",
                 "pylsp",
                 "html",
                 "gopls",
-                "vuels",
+                "volar",
+                "tailwindcss"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -85,7 +86,14 @@ return {
                             }
                         }
                     }
-                end
+                end,
+                ["clangd"] = function ()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.clangd.setup{
+                        capabilities = capabilities,
+                        root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", "."),
+                    }
+                end,
             }
         })
 

@@ -39,8 +39,8 @@ autocmd({"BufWritePre"}, {
 autocmd('BufEnter', {
     group = ryanGroup,
     callback = function()
-        -- vim.cmd.colorscheme("everforest")
-        vim.cmd.colorscheme("tokyonight")
+        vim.cmd.colorscheme("everforest")
+        --vim.cmd.colorscheme("tokyonight")
     end
 })
 
