@@ -11,6 +11,7 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
+        "brenoprata10/nvim-highlight-colors",
     },
 
     config = function()
@@ -32,7 +33,6 @@ return {
                 "clangd",
                 "eslint",
                 "cmake",
-                --"cssls",
                 "harper_ls",
                 "pylsp",
                 "html",
@@ -77,16 +77,6 @@ return {
                         }
                     }
                 end,
-                ["ts_ls"] = function ()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.ts_ls.setup {
-                        init_options = {
-                            preferences = {
-                                disableSuggestions = true,
-                            }
-                        }
-                    }
-                end,
                 ["clangd"] = function ()
                     local lspconfig = require("lspconfig")
                     lspconfig.clangd.setup{
@@ -114,10 +104,13 @@ return {
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
+                { name = 'path' },
             }, {
                 { name = 'buffer' },
-            })
+            }),
         })
+
+        require('nvim-highlight-colors').setup({})
 
         vim.diagnostic.config({
             -- update_in_insert = true,

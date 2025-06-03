@@ -7,7 +7,7 @@ local tokyo = {
     'folke/tokyonight.nvim',
     config = function ()
         require("tokyonight").setup({
-            style = "storm",
+            style = "s",
             --transparent = "true"
         })
     end
@@ -19,7 +19,7 @@ local forest = {
         vim.g.everforest_enable_italic = true
         vim.g.everforest_transparent_background = 1
         vim.cmd.colorscheme('everforest')
-        TransBG()
+        --TransBG()
     end
 }
 
