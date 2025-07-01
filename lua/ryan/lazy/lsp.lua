@@ -29,39 +29,15 @@ return {
             ensure_installed = {
                 "ts_ls",
                 "lua_ls",
-                "jdtls",
-                "clangd",
                 "eslint",
-                "cmake",
                 "harper_ls",
-                "pylsp",
-                "html",
-                "gopls",
-                "volar",
-                "tailwindcss"
+                "gopls"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities
                     }
-                end,
-
-                zls = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.zls.setup({
-                        root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
-                        settings = {
-                            zls = {
-                                enable_inlay_hints = true,
-                                enable_snippets = true,
-                                warn_style = true,
-                            },
-                        },
-                    })
-                    vim.g.zig_fmt_parse_errors = 0
-                    vim.g.zig_fmt_autosave = 0
-
                 end,
                 ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
@@ -77,11 +53,15 @@ return {
                         }
                     }
                 end,
-                ["clangd"] = function ()
+                ["harper_ls"] = function ()
                     local lspconfig = require("lspconfig")
-                    lspconfig.clangd.setup{
-                        capabilities = capabilities,
-                        root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", "."),
+                    lspconfig.harper_ls.setup{
+                        settings = {
+                            linters = {
+                                SentenceCapitalization = false,
+                                LongSentences = false
+                            }
+                        }
                     }
                 end,
             }
@@ -102,6 +82,7 @@ return {
                 ["<C-Space>"] = cmp.mapping.complete(),
             }),
             sources = cmp.config.sources({
+                { name = 'copilot' },
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
                 { name = 'path' },
