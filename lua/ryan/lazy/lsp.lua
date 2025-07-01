@@ -29,9 +29,16 @@ return {
             ensure_installed = {
                 "ts_ls",
                 "lua_ls",
+                "jdtls",
+                "clangd",
                 "eslint",
+                "cmake",
                 "harper_ls",
-                "gopls"
+                "pylsp",
+                "html",
+                "gopls",
+                "volar",
+                "tailwindcss"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -51,6 +58,32 @@ return {
                                 }
                             }
                         }
+                    }
+                end,
+                ["gopls"] = function ()
+                    local lspconfig = require("lspconfig")
+                    local util = require("lspconfig.util")
+                    lspconfig.gopls.setup{
+                        capabilities = capabilities,
+                        cmd = { "gopls" },
+                        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+                        root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+                        settings = {
+                            gopls = {
+                                completeUnimported = true,
+                                usePlaceholders = true,
+                                analyses = {
+                                    unusedparams = true,
+                                },
+                            }
+                       }
+                    }
+                end,
+                ["clangd"] = function ()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.clangd.setup{
+                        capabilities = capabilities,
+                        root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", "."),
                     }
                 end,
                 ["harper_ls"] = function ()
