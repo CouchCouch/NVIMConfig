@@ -21,6 +21,17 @@ return {
         { "hrsh7th/cmp-cmdline" },
         { "saadparwaiz1/cmp_luasnip" },
         { "j-hui/fidget.nvim" },
+        {
+            "folke/lazydev.nvim",
+            ft = "lua", -- only load on lua files
+            opts = {
+                library = {
+                    -- See the configuration section for more details
+                    -- Load luvit types when the `vim.uv` word is found
+                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                },
+            },
+        }
     },
     config = function()
         local lsp = require('lsp-zero')
@@ -81,43 +92,60 @@ return {
                         }
                     }
                 end,
-                lsp.configure('gopls', {
-                    settings = {
-                        gopls = {
-                            gofumpt = true,
-                            completeUnimported = true,
-                            usePlaceholders = true,
-                            analyses = {
-                                unusedparams = true,
-                            },
-                            hints = {
-                                assignVariableTypes = true,
-                                compositeLiteralFields = true,
-                                compositeLiteralTypes = true,
-                                constantValues = true,
-                                parameterNames = true,
-                                variableTypes = true,
-                                functionTypeParameters = true,
-                                rangeVariableTypes = true,
-                            },
+                ['gopls'] = function()
+                    require("lspconfig").gopls.setup {
+                        settings = {
+                            gopls = {
+                                gofumpt = true,
+                                staticcheck = true,
+                                completeUnimported = true,
+                                usePlaceholders = true,
+                                analyses = {
+                                    unusedparams = true,
+                                },
+                                hints = {
+                                    assignVariableTypes = true,
+                                    compositeLiteralFields = true,
+                                    compositeLiteralTypes = true,
+                                    constantValues = true,
+                                    parameterNames = true,
+                                    variableTypes = true,
+                                    functionTypeParameters = true,
+                                    rangeVariableTypes = true,
+                                },
+                            }
                         }
                     }
-                }),
+                end,
+                ['ts_ls'] = function ()
+                    require("lspconfig").ts_ls.setup {
+                        root_dir = require("lspconfig").util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+                        settings = {
+                            tsserver = {
+                                filetypes = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.jsx" },
+                                format = { enable = false },
+                                importModuleSpecifierPreference = "project-relative",
+                            }
+                        }
+                    }
+                end,
                 ["clangd"] = function ()
                     local lspconfig = require("lspconfig")
                     lspconfig.clangd.setup{
-                        capabilities = capabilities,
                         root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", "."),
                     }
                 end,
 
-                harper_ls = function ()
+                ["harper_ls"] = function ()
                     local lspconfig = require("lspconfig")
                     lspconfig.harper_ls.setup{
                         settings = {
-                            linters = {
-                                SentenceCapitalization = false,
-                                LongSentences = false
+                            ["harper-ls"] = {
+                                linters = {
+                                    SentenceCapitalization = false,
+                                    LongSentences = false,
+                                },
+                                diagnosticSeverity = "hint",
                             }
                         }
                     }
@@ -167,7 +195,7 @@ return {
                 focusable = false,
                 style = "minimal",
                 border = "rounded",
-                source = "always",
+                source = true,
                 header = "",
                 prefix = "",
             },

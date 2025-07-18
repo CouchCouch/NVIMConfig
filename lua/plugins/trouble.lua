@@ -8,14 +8,16 @@ return {
                     my_diagnostics = {
                         mode = 'diagnostics',
                         filter = {
-                            ['not'] = { source = "Harper" }
+                            severity = {
+                                vim.diagnostic.severity.ERROR,
+                            },
                         }
                     },
                 }
             })
-
+-- a run on sentence with a non capitalized first word for testing
             vim.keymap.set("n", "<leader>tt", function()
-                require("trouble").toggle()
+                require("trouble").toggle('diagnostics')
             end)
 
             vim.keymap.set("n", "[t", function()
