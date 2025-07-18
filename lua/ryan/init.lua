@@ -48,8 +48,7 @@ autocmd('BufEnter', {
 autocmd('LspAttach', {
     group = ryanGroup,
     callback = function()
-        vim.lsp.inlay_hint.enable(true)
-    end
+    end,
 })
 
 vim.g.netrw_browse_split = 0
