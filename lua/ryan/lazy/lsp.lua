@@ -48,10 +48,15 @@ return {
             ensure_installed = {
                 "ts_ls",
                 "lua_ls",
+                "jdtls",
+                "clangd",
                 "eslint",
+                "cmake",
                 "harper_ls",
                 "pylsp",
+                "html",
                 "gopls",
+                "tailwindcss"
             },
             handlers = {
                 --lsp.default_setup,
@@ -90,13 +95,21 @@ return {
                                 compositeLiteralTypes = true,
                                 constantValues = true,
                                 parameterNames = true,
-                                --variableTypes = true,
+                                variableTypes = true,
                                 functionTypeParameters = true,
                                 rangeVariableTypes = true,
                             },
                         }
                     }
                 }),
+                ["clangd"] = function ()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.clangd.setup{
+                        capabilities = capabilities,
+                        root_dir = lspconfig.util.root_pattern("compile_commands.json", "compile_flags.txt", "."),
+                    }
+                end,
+
                 harper_ls = function ()
                     local lspconfig = require("lspconfig")
                     lspconfig.harper_ls.setup{
