@@ -4,6 +4,14 @@ return {
         config = function()
             require("trouble").setup({
                 --icons = false,
+                modes = {
+                    my_diagnostics = {
+                        mode = 'diagnostics',
+                        filter = {
+                            ['not'] = { source = "Harper" }
+                        }
+                    },
+                }
             })
 
             vim.keymap.set("n", "<leader>tt", function()
